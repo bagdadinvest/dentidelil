@@ -1,0 +1,11 @@
+project_repo: git@github.com:bagdadinvest/dentidelil.git
+project_title: dentidelil
+project_name: dentidelil 
+sites_dir:  /usr/local/sites
+virtualenvs_dir: /home/django/virtualenvs/
+nginx_root_dir:  /etc/nginx/sites-available
+gunicorn:  127.0.0.1:2015
+deploy_user: denti 
+keystore_path: dentidelil_keystore 
+vcs: git
+vcs_host: github.com

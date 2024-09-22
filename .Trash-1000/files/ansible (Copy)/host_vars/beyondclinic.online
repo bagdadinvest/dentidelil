@@ -1,0 +1,16 @@
+use_ssl: false
+
+django_env:
+    DJANGO_SETTINGS_MODULE: dentidelil.settings.production
+    HOST_NAME: beyondclinic.online
+    DB_USER: denti
+    DB_PASSWD: 'z2og961yfwhm'
+    DB_HOST: localhost
+    DB_NAME: dentidelil_db 
+    EMAIL_HOST: 'email_host'
+    EMAIL_FROM: 'support@chrisdev.com'
+    EMAIL_USER: 'email_user'
+    EMAIL_PASSWD: 'email_passwd'
+    DJANGO_ADMIN_USER: 'denti'
+    DJANGO_ADMIN_EMAIL: 'admin@host.com' 
+    DJANGO_ADMIN_PASSWD: 'ewa3us8znt88'

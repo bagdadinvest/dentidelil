@@ -1,0 +1,26 @@
+{% load static i18n %}
+
+
+<nav>
+    <div class="logo">
+        <a href="/">{{ page.main_title }}</a> <!-- Main page title, dynamic for each page -->
+    </div>
+    <div class="menu-icon">
+        <span></span>
+    </div>
+</nav>
+
+<section class="overlay-menu">
+    <div class="container">
+        <div class="row">
+            <div class="main-menu">
+                <ul>
+                    {% for child_page in root_page.get_children.live %}
+                        <li><a href="{{ child_page.url }}">{{ child_page.title }}</a></li>
+                    {% endfor %}
+                </ul>                
+                <p>{% trans "Your smile, our priority. Affordable dental care abroad." %}</p>
+            </div>
+        </div>
+    </div>
+</section>

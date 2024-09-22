@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tooth Implant Model</title>
+    <style>
+      body { margin: 0; }
+      canvas { display: block; }
+    </style>
+
+    <!-- Import Map to resolve "three" module -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.module.js",
+          "three/examples/jsm/controls/OrbitControls": "https://cdn.jsdelivr.net/npm/three@0.150.1/examples/jsm/controls/OrbitControls.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from 'three';
+      import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Orbit Controls
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0x404040, 2);
+      scene.add(ambientLight);
+
+      const pointLight = new THREE.PointLight(0xffffff, 2, 100);
+      pointLight.position.set(10, 10, 10);
+      scene.add(pointLight);
+
+      // Implant geometry (cylinder)
+      const implantGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32);
+      const implantMaterial = new THREE.MeshStandardMaterial({ color: 0x808080, metalness: 0.7, roughness: 0.2 });
+      const implant = new THREE.Mesh(implantGeometry, implantMaterial);
+      implant.position.y = -0.5;
+      scene.add(implant);
+
+      // Crown geometry (combination of shapes)
+      const crownGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+      const crownMaterial = new THREE.MeshStandardMaterial({ color: 0xf5f5dc, metalness: 0.1, roughness: 0.9 });
+      const crown = new THREE.Mesh(crownGeometry, crownMaterial);
+      crown.position.y = 0.6;
+      scene.add(crown);
+
+      // Camera position
+      camera.position.z = 5;
+
+      // Render loop
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      // Handle window resizing
+      window.addEventListener('resize', () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      });
+    </script>
+  </body>
+</html>

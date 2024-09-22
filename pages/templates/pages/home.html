@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% block content %}
+
+<!-- Background video -->
+<div id="video-container">
+    <div class="video-overlay"></div>
+    <div class="video-content">
+        <div class="inner">
+            <h1>{{ page.title_text }}</h1>  <!-- Dynamic title -->
+            <p>{{ page.main_description }}</p>  <!-- Dynamic description -->
+            <div class="scroll-icon">
+                <a class="scrollTo" data-scrollTo="portfolio" href="#"><img src="{% static 'home/img/scroll-icon.png' %}" alt=""></a>
+            </div>
+        </div>
+    </div>
+    {% if page.background_video %}
+        <video autoplay loop muted>
+            <source src="{{ page.background_video }}" type="video/mp4">
+        </video>
+    {% endif %}
+</div>
+
+<!-- Portfolio Section -->
+<div class="grid-portfolio" id="portfolio">
+    <div class="container">
+        {% for block in page.content_items.all %}
+        <div class="col-md-4 col-sm-6">
+            <div class="portfolio-item">
+                <a href="#">
+                    <div class="thumb">
+                        <div class="hover-effect">
+                            <div class="hover-content">
+                                <h1>{{ block.title }}</h1>  <!-- Dynamic title -->
+                                <p>{{ block.summary }}</p>  <!-- Dynamic summary -->
+                            </div>
+                        </div>
+                        {% if block.image %}
+                        <div class="image">
+                            <img src="{{ block.image.url }}" alt="{{ block.title }}">
+                        </div>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Footer Section -->
+<footer>
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <p>Copyright &copy; 2024 {{ page.title_text }} | Designed by LOTFI KANOUNI</p>
+        </div>
+    </div>
+</footer>
+
+{% endblock content %}
+{% block javascripts %}
+{% endblock javascripts %}

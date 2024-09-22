@@ -1,0 +1,6 @@
+---
+- hosts: all
+  user: root
+  gather_facts: no
+  pre_tasks:
+      - raw: sudo apt update && sudo apt -y install python-simplejson

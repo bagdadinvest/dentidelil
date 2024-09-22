@@ -1,0 +1,118 @@
+{% extends "base2.html" %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+
+
+{% block content %}
+<div class="page-heading">
+    <div class="container">
+        <div class="heading-content">
+            <h1>Our <em>Blog</em></h1>
+        </div>
+    </div>
+</div>
+
+<div class="blog-entries">
+    <div class="container">
+        <div class="col-md-9">
+            <div class="blog-posts">
+                <div class="row">
+                    {% for post in blogs %}
+                    <div class="col-md-12">
+                        <div class="blog-post">
+                            {% if post.feed_image %}
+                                {% image post.feed_image fill-900x400 as feed_image %}
+                                <img src="{{ feed_image.url }}" alt="{{ post.title }}">
+                            {% endif %}
+                            <div class="text-content">
+                                <span><a href="#">Admin</a> / <a href="#">{{ post.date }}</a> / <a href="#">{{ post.category }}</a></span>
+                                <h2>{{ post.title }}</h2>
+                                <p>{{ post.intro|safe }}</p>
+                                <div class="simple-btn">
+                                    <a href="{{ post.url }}">continue reading</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Pagination -->
+                    {% if blogs.has_other_pages %}
+                    <div class="col-md-12">
+                        <ul class="page-number">
+                            {% if blogs.has_previous %}
+                                <li class="pagination-previous">
+                                    <a href="?page={{ blogs.previous_page_number }}">Previous</a>
+                                </li>
+                            {% else %}
+                                <li class="pagination-previous disabled">Previous</li>
+                            {% endif %}
+                            <li class="unavailable">Page {{ blogs.number }} of {{ blogs.paginator.num_pages }}</li>
+                            {% if blogs.has_next %}
+                                <li class="pagination-next">
+                                    <a href="?page={{ blogs.next_page_number }}">Next</a>
+                                </li>
+                            {% else %}
+                                <li class="pagination-next disabled">Next</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="side-bar">
+                <div class="search">
+                    <fieldset>
+                        <input name="search" type="text" class="form-control" id="search" placeholder="Search..." required="">
+                    </fieldset>
+                </div>
+                <div class="archives">
+                    <div class="sidebar-heading">
+                        <h2>Archives</h2>
+                    </div>
+                    <ul>
+                        <!-- Example archive list, replace with Wagtail dynamic data as needed -->
+                        <li><a href="#">> 2018 September (4)</a></li>
+                        <li><a href="#">> 2018 August (16)</a></li>
+                        <!-- More archive links -->
+                    </ul>
+                </div>
+                <div class="recent-posts">
+                    <div class="sidebar-heading">
+                        <h2>Recent Posts</h2>
+                    </div>
+                    <ul>
+                        {% for recent_post in recent_posts %}
+                        <li>
+                            <a href="{{ recent_post.url }}">
+                                {% if recent_post.feed_image %}
+                                    {% image recent_post.feed_image fill-100x100 as recent_image %}
+                                    <img src="{{ recent_image.url }}" alt="{{ recent_post.title }}">
+                                {% endif %}
+                                <div class="text">
+                                    <h6>{{ recent_post.title }}</h6>
+                                    <span>{{ recent_post.date }}</span>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="categories">
+                    <div class="sidebar-heading">
+                        <h2>Categories</h2>
+                    </div>
+                    <ul>
+                        {% for category in categories %}
+                        <li><a href="#">> {{ category.name }} ({{ category.post_count }})</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

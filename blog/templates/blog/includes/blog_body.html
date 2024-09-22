@@ -1,0 +1,8 @@
+{% load wagtailcore_tags %}
+
+{% if body %}
+  	{% for block in body %}
+  		<p>-{{ block.block_type }} </p>
+      	{% include_block block %}
+  	{% endfor %}
+s{% endif %}

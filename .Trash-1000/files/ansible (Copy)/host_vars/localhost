@@ -1,0 +1,17 @@
+---
+use_ssl: false
+django_env:
+    SECRET_KEY: your_secret_key 
+    DJANGO_SETTINGS_MODULE: dentidelil.settings.production
+    HOST_NAME: localhost
+    DB_USER: django
+    DB_PASSWD: change_db_password!!!
+    DB_HOST: localhost
+    DB_NAME: dentidelil_db 
+    EMAIL_HOST: 'email_host'
+    EMAIL_FROM: 'support@chrisdev.com'
+    EMAIL_USER: 'email_user'
+    EMAIL_PASSWD: 'email_passwd'
+    DJANGO_ADMIN_USER: denti
+    DJANGO_ADMIN_PASSWD: 'your_admin_password'
+

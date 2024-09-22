@@ -1,0 +1,44 @@
+{% load wagtailcore_tags navigation_tags i18n wagtailsettings_tags static %}
+{% get_settings %}
+{% get_site_root as site_root %}
+{% load static i18n %}
+
+<nav>
+    <div class="logo">
+        <a href="{% pageurl site_root %}">{{ page.main_title }}</a> <!-- Main page title, dynamic for each page -->
+    </div>
+    <div class="menu-icon">
+        <span></span>
+    </div>
+</nav>
+				{% comment %}
+				{% include "utils/tags/navigation/account.html" %}
+				{% endcomment %}
+  		</div>
+	</div>
+	<section class="overlay-menu">
+		<div class="container">
+			<div class="row">
+				<div class="main-menu">
+					<ul>
+						<li class="{% if calling_page.url == site_root %} is-active{% endif %}"><a href="{% pageurl site_root %}">Home</a></li>
+						{% for menuitem in menuitems %}
+						<li class="{% if menuitem.show_dropdown %}has-submenu{% endif %}">
+						  <a href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+							  {% if menuitem.show_dropdown %}
+								  <ul class="submenu menu vertical" data-submenu>
+									  <li class="show-for-small-only">
+										  <a href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+									  </li>
+										{% top_menu_children parent=menuitem %}
+								  </ul>
+							  {% endif %}
+					  </li>
+				  {% endfor %}
+					  </ul>                
+					<p>{% trans "Your smile, our priority. Affordable dental care abroad." %}</p>
+				</div>
+			</div>
+			{% include "contact/includes/social.html" %}
+		</div>
+	</section>
