@@ -1088,6 +1088,15 @@ footer a:hover {
     font-weight: 300;
 }
 
+.single-blog-post .text-content h3 {
+    margin-top: 0px;
+    margin-left: 20px;
+    font-size: 24px;
+    color: #f4dd5b;
+    letter-spacing: 0.5px;
+    text-transform: capitalize;
+    font-weight: 250;
+}
 .single-blog-post .text-content p {
     color: #bbb;
     font-size: 16px;
@@ -1322,4 +1331,176 @@ footer a:hover {
     .single-blog-post .tags-share .share {
         text-align: center;
     }
+}
+
+.sticky-social-bar {
+  padding: 0;
+  margin: 0;
+  top: 50%;
+  z-index: 9999;
+  transform: translateY(-50%);
+  width: 11.25rem;
+  background-color: #333333;
+  position: fixed;
+  left: -8.75rem;
+}
+.sticky-social-bar .social-icon {
+  list-style-type: none;
+  color: #fefefe;
+  background-color: inherit;
+  margin: 0;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0.25rem 0.25rem 0.5rem;
+}
+.sticky-social-bar .social-icon:first-of-type {
+  padding-top: 0.375rem;
+}
+.sticky-social-bar .social-icon:last-of-type {
+  padding-bottom: 0.625rem;
+}
+.sticky-social-bar .social-icon > a {
+  color: inherit;
+  background-color: inherit;
+}
+.sticky-social-bar .social-icon > a > .fab, .sticky-social-bar .social-icon > a .fa {
+  padding: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  float: right;
+  margin-left: 0.5rem;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-facebook-f, .sticky-social-bar .social-icon > a .fa.fa-facebook-f {
+  background-color: #3b5998;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-twitter, .sticky-social-bar .social-icon > a .fa.fa-twitter {
+  background-color: #55acee;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-linkedin-in, .sticky-social-bar .social-icon > a .fa.fa-linkedin-in {
+  background-color: #007bb5;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-google-plus-g, .sticky-social-bar .social-icon > a .fa.fa-google-plus-g {
+  background-color: #3cba54;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-pinterest-p, .sticky-social-bar .social-icon > a .fa.fa-pinterest-p {
+  background-color: #cb2027;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-envelope, .sticky-social-bar .social-icon > a .fa.fa-envelope {
+  background-color: #3e50b4;
+}
+.sticky-social-bar .social-icon > a > .fab.fa-print, .sticky-social-bar .social-icon > a .fa.fa-print {
+  background-color: #777;
+}
+.sticky-social-bar .social-icon > a > .social-icon-text {
+  font-size: 80%;
+  color: #fefefe;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+.sticky-social-bar .social-icon:hover {
+  transform: translateX(8.75rem);
+}
+.sticky-social-bar .social-icon:hover > a {
+  color: inherit;
+  background-color: inherit;
+}
+
+.rounded-social-buttons {
+  padding: 1px 0;
+  text-align: center;
+}
+.rounded-social-buttons .social-button {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 0.125rem solid transparent;
+  padding: 1px;
+  text-decoration: none;
+  text-align: center;
+  color: #fefefe;
+  font-size: 2rem;
+  font-weight: normal;
+  line-height: 1.6em;
+  border-radius: 1.6875rem;
+  transition: all 0.5s ease;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.rounded-social-buttons .social-button:hover, .rounded-social-buttons .social-button:focus {
+  transform: rotate(360deg);
+}
+.rounded-social-buttons .social-button.facebook {
+  background: #3b5998;
+}
+.rounded-social-buttons .social-button.facebook:before {
+  font-family: "FontAwesome";
+  content: "\f09a";
+}
+.rounded-social-buttons .social-button.facebook:hover, .rounded-social-buttons .social-button.facebook:focus {
+  color: #3b5998;
+  background: #fefefe;
+  border-color: #3b5998;
+}
+.rounded-social-buttons .social-button.twitter {
+  background: #55acee;
+}
+.rounded-social-buttons .social-button.twitter:before {
+  font-family: "FontAwesome";
+  content: "\f099";
+}
+.rounded-social-buttons .social-button.twitter:hover, .rounded-social-buttons .social-button.twitter:focus {
+  color: #55acee;
+  background: #fefefe;
+  border-color: #55acee;
+}
+.rounded-social-buttons .social-button.linkedin {
+  background: #007bb5;
+}
+.rounded-social-buttons .social-button.linkedin:before {
+  font-family: "FontAwesome";
+  content: "\f0e1";
+}
+.rounded-social-buttons .social-button.linkedin:hover, .rounded-social-buttons .social-button.linkedin:focus {
+  color: #007bb5;
+  background: #fefefe;
+  border-color: #007bb5;
+}
+.rounded-social-buttons .social-button.whatsapp {
+  background: #43d854;
+}
+.rounded-social-buttons .social-button.whatsapp:before {
+  font-family: "FontAwesome";
+  content: "\f232";
+}
+.rounded-social-buttons .social-button.whatsapp:hover, .rounded-social-buttons .social-button.whatsapp:focus {
+  color: #43d854;
+  background: #fefefe;
+  border-color: #43d854;
+}
+.rounded-social-buttons .social-button.pinterest {
+  background: #cb2027;
+}
+.rounded-social-buttons .social-button.pinterest:before {
+  font-family: "FontAwesome";
+  content: "\f231";
+}
+.rounded-social-buttons .social-button.pinterest:hover, .rounded-social-buttons .social-button.pinterest:focus {
+  color: #cb2027;
+  background: #fefefe;
+  border-color: #cb2027;
+}
+.rounded-social-buttons .social-button.mail {
+  background: #3e50b4;
+}
+.rounded-social-buttons .social-button.mail:before {
+  font-family: "FontAwesome";
+  content: "\f0e0";
+}
+.rounded-social-buttons .social-button.mail:hover, .rounded-social-buttons .social-button.mail:focus {
+  color: #3e50b4;
+  background: #fefefe;
+  border-color: #3e50b4;
 }

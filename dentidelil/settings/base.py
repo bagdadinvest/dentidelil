@@ -9,6 +9,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 from sys import path
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 import environ
@@ -38,7 +41,7 @@ path.append(DJANGO_ROOT)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = ['localhost','beyondclinic.online']
+ALLOWED_HOSTS = ['localhost','beyondclinic.online','127.0.0.1']
 
 
 # Application definition
@@ -96,7 +99,7 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.linkedin',
-    
+
 
 )
 
@@ -218,7 +221,17 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = False
+WAGTAIL_I18N_ENABLED = True
 
+LANGUAGES = [
+    ('en', 'English'),
+    ('tr', 'Turkish'),
+    # Add other languages as needed
+]
+
+LOCALE_PATHS = (
+    BASE_DIR / 'locale',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -288,3 +301,4 @@ BROKER_URL = 'redis://'
 
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYD_LOG_COLOR = False
+

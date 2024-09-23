@@ -110,3 +110,4 @@ class RelatedLink(LinkFields):
 
     class Meta:
         abstract = True
+
