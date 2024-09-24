@@ -61,9 +61,6 @@ INSTALLED_APPS = (
     'modelcluster',
 
     'foundation_formtags',
-    'modeltranslation',
-    'wagtail_modeltranslation',
-    'rosetta',  # Rosetta integration
 
     'blog',
     'contact',
