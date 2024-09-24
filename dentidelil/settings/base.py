@@ -61,6 +61,9 @@ INSTALLED_APPS = (
     'modelcluster',
 
     'foundation_formtags',
+    'modeltranslation',
+    'wagtail_modeltranslation',
+    'rosetta',  # Rosetta integration
 
     'blog',
     'contact',
@@ -72,7 +75,6 @@ INSTALLED_APPS = (
     'search',
     'users',
     'utils',
-
     'wagtail.contrib.routable_page',
     'wagtail.contrib.sitemaps',
     'wagtail.contrib.search_promotions',
@@ -112,8 +114,8 @@ MIDDLEWARE = (
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.middleware.security.SecurityMiddleware',
   'django.contrib.sites.middleware.CurrentSiteMiddleware',
-
   'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+
 )
 
 
@@ -125,6 +127,12 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS = True
+
+ROSETTA_MESSAGES_PER_PAGE = 500
+
+AZURE_CLIENT_SECRET = 'f0ab28fa69a04f979d904943643d3265'
 
 TEMPLATES = [
     {

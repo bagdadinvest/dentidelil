@@ -1,5 +1,6 @@
 {% extends "base2.html" %}
-{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags wagtailuserbar %}
+{% wagtailuserbar %}
 
 {% block canonical_url %}
     <link rel="amphtml" href="{{ request.site.root_url }}{% routablepageurl page "amp" %}" />
@@ -11,133 +12,130 @@
 <div class="page-heading">
     <div class="container">
         <div class="heading-content">
-            <h1>Our <em>Blog</em></h1>
+            <h2>Our <em>Blog</em></h2>
         </div>
     </div>
 </div>
 
 <div class="blog-entries">
     <div class="container">
-        <div class="col-md-9">
-            <div class="blog-posts">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="single-blog-post">
-                            {% if self.feed_image %}
-							<div class="icon">
-								{% image self.feed_image fill-765x325 as feed_image %}
-							<img src="{{ feed_image.url }}" alt="">
-                            {% endif %}
-                            {% include "blog/includes/blog_header.html" %}
-                                        <div class="text-content">
-                                            <!-- Blog body include -->
-                                            {% include "blog/includes/blog_body.html" with body=self.body only %}
+        <!-- Add a row to wrap both columns -->
+        <div class="row">
+            <div class="col-md-9">
+                <div class="blog-posts">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="single-blog-post">
+                                {% if self.feed_image %}
+                                    {% image self.feed_image fill-765x325 as feed_image %}
+                                    <img src="{{ feed_image.url }}" alt="">
+                                {% endif %}
+                                <div class="text-content">
+                                    {% include "blog/includes/blog_header.html" %}
+                                    {% include "blog/includes/blog_body.html" with body=self.body only %}
+                                  <a href="/our-blogs/">Back to Blog</a>
+                                </div>
+
+                                <div class="tags-share">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="tags">
+                                                {% with self.tags.all as tags %}
+                                                {% if tags %}
+                                                <li>Tags:</li>
+                                                {% for tag in tags.all %}
+                                                    <li><a href="{% pageurl self.blog_index %}?tag={{ tag }}">l {{ tag }}</a>,</li>
+                                                {% endfor %}
+                                                {% endif %}
+                                                {% endwith %}
+                                            </ul>
                                         </div>
+                                        <!-- Social share include -->
+                                        {% include "utils/includes/social_share.html" %}
                                     </div>
                                 </div>
                             </div>
-							<div class="tags-share">
-								<div class="row">
-									<div class="col-md-6">
-										<ul class="tags">
-											{% with self.tags.all as tags %}
-											{% if tags %}
-											<li>Tags:</li>
-											{% for tag in tags.all %}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-											<li><a href="{% pageurl self.blog_index %}?tag={{ tag }}">l {{ tag }}</a>,</li>
-											{% endfor %}
-										</div>
-							{% endif %}
-						{% endwith %}
-                            <!-- Social share include -->
-                            {% include "utils/includes/social_share.html" %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<div class="side-bar">
-				<div class="search">
-					<fieldset>
-						<input name="search" type="text" class="form-control" id="search" placeholder="Search..." required="">
-					</fieldset>
-				</div>
-				<div class="archives">
-					<div class="sidebar-heding">
-						<h2>Archives</h2>
-					</div>
-					<ul>
-						<li><a href="#">&gt; 2018 September (4)</a></li>
-						<li><a href="#">&gt; 2018 August (16)</a></li>
-						<li><a href="#">&gt; 2018 July (5)</a></li>
-						<li><a href="#">&gt; 2018 May (3)</a></li>
-						<li><a href="#">&gt; 2018 February (27)</a></li>
-						<li><a href="#">&gt; 2017 December (18)</a></li>
-						<li><a href="#">&gt; 2017 November (12)</a></li>
-					</ul>
-				</div>
-				<div class="recent-posts">
-					<div class="sidebar-heding">
-						<h2>Recent Posts</h2>
-					</div>
-				                    <ul>
-                        {% if blogs %}
-                            {% for post in blogs %}
-                                {% if post.feed_image %}
-                                <li><a href="{{ post.url }}">
-                                    {% image post.feed_image fill-60x60 as feed_image %}
-                                    <img src="{{ feed_image.url }}" alt="{{ post.title }}">
-                                {% endif %}
-                                <div class="text">
-                                    <h6>{{ post.title }}</h6>
-                                    <span>{{ post.date }}</span>
-                                </div>
-                                </a></li>
-                            {% endfor %}
-                        {% else %}
-                            <p>No recent posts available.</p>
-                        {% endif %}
-                    </ul>
-				</div>
-				<div class="categories">
-					<div class="sidebar-heding">
-						<h2>Categories</h2>
-					</div>
-					<ul>
-						<li><a href="#">&gt; Lifestyle (7)</a></li>
-						<li><a href="#">&gt; Branding (9)</a></li>
-						<li><a href="#">&gt; Nature (14)</a></li>
-						<li><a href="#">&gt; Work Stuff (6)</a></li>
-						<li><a href="#">&gt; Science (5)</a></li>
-					</ul>
-				</div>
-				<div class="latest-gallery">
-					<div class="sidebar-heding">
-						<h2>Latest Gallery</h2>
-					</div>
-					<ul>
-						<li><a href="#"></a><img src="img/latest_gallery_1.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_2.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_3.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_4.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_5.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_6.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_7.png" alt=""></li>
-						<li><a href="#"></a><img src="img/latest_gallery_8.png" alt=""></li>
-					</ul>
-				</div>
-			</div>
-		</div> <!-- End col-md-12 -->
-	</div> <!-- End row -->
-
-
-
+            <!-- Add the column size for the sidebar -->
+            <div class="col-md-3">
+                <div class="side-bar">
+                    <div class="search">
+                        <fieldset>
+                            <input name="search" type="text" class="form-control" id="search" placeholder="Search..." required="">
+                        </fieldset>
+                    </div>
+                    <div class="archives">
+                        <div class="sidebar-heding">
+                            <h2>Archives</h2>
+                        </div>
+                        <ul>
+                            <li><a href="#">&gt; 2018 September (4)</a></li>
+                            <li><a href="#">&gt; 2018 August (16)</a></li>
+                            <li><a href="#">&gt; 2018 July (5)</a></li>
+                            <li><a href="#">&gt; 2018 May (3)</a></li>
+                            <li><a href="#">&gt; 2018 February (27)</a></li>
+                            <li><a href="#">&gt; 2017 December (18)</a></li>
+                            <li><a href="#">&gt; 2017 November (12)</a></li>
+                        </ul>
+                    </div>
+                    <div class="recent-posts">
+                        <div class="sidebar-heding">
+                            <h2>Recent Posts</h2>
+                        </div>
+                        <ul>
+                            {% if blogs %}
+                                {% for post in blogs %}
+                                    <li><a href="{{ post.url }}">
+                                        {% if post.feed_image %}
+                                            {% image post.feed_image fill-60x60 as feed_image %}
+                                            <img src="{{ feed_image.url }}" alt="{{ post.title }}">
+                                        {% endif %}
+                                        <div class="text">
+                                            <h6>{{ post.title }}</h6>
+                                            <span>{{ post.date }}</span>
+                                        </div>
+                                    </a></li>
+                                {% endfor %}
+                            {% else %}
+                                <p>No recent posts available.</p>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="categories">
+                        <div class="sidebar-heding">
+                            <h2>Categories</h2>
+                        </div>
+                        <ul>
+                            <li><a href="#">&gt; Lifestyle (7)</a></li>
+                            <li><a href="#">&gt; Branding (9)</a></li>
+                            <li><a href="#">&gt; Nature (14)</a></li>
+                            <li><a href="#">&gt; Work Stuff (6)</a></li>
+                            <li><a href="#">&gt; Science (5)</a></li>
+                        </ul>
+                    </div>
+                    <div class="latest-gallery">
+                        <div class="sidebar-heding">
+                            <h2>Latest Gallery</h2>
+                        </div>
+                        <ul>
+                            <li><a href="#"></a><img src="img/latest_gallery_1.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_2.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_3.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_4.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_5.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_6.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_7.png" alt=""></li>
+                            <li><a href="#"></a><img src="img/latest_gallery_8.png" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End row -->
+    </div> <!-- End container -->
+</div> <!-- End blog-entries -->
 
 {% endblock %}
-
-
-
-
-
