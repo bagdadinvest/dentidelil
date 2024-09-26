@@ -1,0 +1,64 @@
+{% load static i18n %}
+{% block content %}
+<div class="menu-overlay"></div>
+    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+    <div class="menu">
+        <div class="hamburger-menu-wrapper">
+            <button class="hamburger-menu" id="hamburger-menu-button">
+                <img src="{% static 'home/img/icons/flags/' %}{{ LANGUAGE_CODE }}.svg" class="flag-button" width="48" alt="{{ LANGUAGE_CODE }}" class="flag-icon" id="current-language-flag">
+                <span>{% trans "language" %}</span>
+            </button>
+        </div>
+        <div class="menu-list" style="display:none;">
+            <form action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}">
+                <button type="submit" class="flag-button" name="language" value="en">
+                    <img src="{% static 'home/img/icons/flags/en.svg' %}" width="58" alt="English">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="ar">
+                    <img src="{% static 'home/img/icons/flags/ar.svg' %}" width="58" alt="Arabic">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="fr">
+                    <img src="{% static 'home/img/icons/flags/fr.svg' %}" width="58" alt="French">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="tr">
+                    <img src="{% static 'home/img/icons/flags/tr.svg' %}" width="58" alt="Turkish">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="de">
+                    <img src="{% static 'home/img/icons/flags/de.svg' %}" width="58" alt="German">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="es">
+                    <img src="{% static 'home/img/icons/flags/es.svg' %}" width="58" alt="Spanish">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="pl">
+                    <img src="{% static 'home/img/icons/flags/pl.svg' %}" width="58" alt="Polish">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="pt">
+                    <img src="{% static 'home/img/icons/flags/pt.svg' %}" width="58" alt="Portuguese">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="hu">
+                    <img src="{% static 'home/img/icons/flags/hu.svg' %}" width="58" alt="Hungarian">
+                </button>
+                <br>
+                <button type="submit" class="flag-button" name="language" value="ru">
+                    <img src="{% static 'home/img/icons/flags/ru.svg' %}" width="58" alt="Russian">
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'home/js/animated-toggle-menu.js' %}"></script>
+{% endblock javascript %}
+

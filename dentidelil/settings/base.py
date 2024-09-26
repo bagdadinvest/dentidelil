@@ -41,8 +41,10 @@ path.append(DJANGO_ROOT)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = ['localhost','beyondclinic.online','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','beyondclinic.online','127.0.0.1','tr.localhost']
 
+AZURE_TRANSLATOR_KEY = '106c8f6b95a4460fae580599a6c74348d746'
+AZURE_TRANSLATOR_ENDPOINT = 'https://api.cognitive.microsofttranslator.com/'
 
 # Application definition
 
@@ -77,6 +79,8 @@ INSTALLED_APPS = (
     'wagtail.contrib.search_promotions',
     'wagtail.search.backends.database',
     'wagtail.contrib.settings',
+    "wagtail_localize",
+    "wagtail_localize.locales",
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
@@ -98,7 +102,8 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.linkedin',
-
+    'rosetta',
+    'storages',
 
 )
 
@@ -111,6 +116,7 @@ MIDDLEWARE = (
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.middleware.security.SecurityMiddleware',
   'django.contrib.sites.middleware.CurrentSiteMiddleware',
+  'django.middleware.locale.LocaleMiddleware',  # should be after SessionMiddleware and before CommonMiddleware
   'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 
 )
@@ -221,22 +227,34 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-gb'
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False
+USE_TZ = True
 WAGTAIL_I18N_ENABLED = True
 
 LANGUAGES = [
     ('en', 'English'),
+    ('ar', 'Arabic'),
+    ('fr', 'French'),
     ('tr', 'Turkish'),
-    # Add other languages as needed
+    ('de', 'German'),
+    ('es', 'Spanish'),
+    ('pl', 'Polish'),
+    ('pt', 'Portuguese'),
+    ('hu', 'Hungarian'),
+    ('ru', 'Russian'),
 ]
 
-LOCALE_PATHS = (
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES
+WAGTAILLOCALIZE_SYNC_TREE = True
+
+
+
+LOCALE_PATHS = [
     BASE_DIR / 'locale',
-)
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -257,9 +275,6 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
-
-MEDIA_ROOT = root('media')
-MEDIA_URL = '/media/'
 
 
 # Django compressor settings
@@ -307,3 +322,15 @@ BROKER_URL = 'redis://'
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERYD_LOG_COLOR = False
 
+
+AZURE_ACCOUNT_NAME = 'denti'
+
+AZURE_ACCOUNT_KEY = '+dgCLIxs2APYUCNRPqv07I++RvZH2v7WSyZGKZFj397wGcD29HflL1gKuCdjqnRQqHW4PGqGR6pA+AStd2PAfQ=='
+
+AZURE_CONTAINER = 'media'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+
+# URL for accessing media files via Azure Blob Storage
+MEDIA_URL = f'https://denti.blob.core.windows.net/media/'
+MEDIA_ROOT = ''

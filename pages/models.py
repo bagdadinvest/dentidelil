@@ -1,42 +1,33 @@
 from django.db import models
-from django.shortcuts import render
-
-from wagtail.core import blocks
-from wagtail.core.models import Page, Orderable
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.images.models import Image
-from wagtail.snippets.models import register_snippet
-from modelcluster.fields import ParentalKey
+from django.shortcuts import render, Http404
 from wagtail.admin.edit_handlers import (
-    FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel,
-    StreamFieldPanel)
+    FieldPanel, MultiFieldPanel, StreamFieldPanel, InlinePanel, PageChooserPanel
+)
+from wagtail.core.blocks import StructBlock, CharBlock, RichTextBlock, RawHTMLBlock
+from wagtail.core.fields import StreamField, RichTextField
+from wagtail.core.models import Page, Orderable, Locale, Site
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtail.search import index
-from utils.models import LinkFields, RelatedLink, CarouselItem
+from modelcluster.fields import ParentalKey
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail.snippets.models import register_snippet
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtailmedia.models import Media
-from wagtailmedia.edit_handlers import MediaChooserPanel
-
-
+from utils.models import LinkFields, RelatedLink, CarouselItem
+from wagtail.images.models import Image
+from django.utils.translation import gettext_lazy as _
 
 
 @register_setting
 class SocialMediaSettings(BaseSetting):
-    facebook = models.URLField(
-        help_text='Your Facebook page URL', null=True, blank=True)
-    instagram = models.URLField(
-        max_length=255, help_text='Your Instagram URL', null=True, blank=True)
-    twitter = models.URLField(
-        max_length=255, help_text='Your Twitter URL', null=True, blank=True)
-    youtube = models.URLField(
-        help_text='Your YouTube Channel URL', null=True, blank=True)
-    linkedin = models.URLField(
-        max_length=255, help_text='Your Linkedin URL', null=True, blank=True)
-    github = models.URLField(
-        max_length=255, help_text='Your Github URL', null=True, blank=True)
-    facebook_appid = models.CharField(
-        max_length=255, help_text='Your Facbook AppID', null=True, blank=True)
+    facebook = models.URLField(_('Your Facebook page URL'), null=True, blank=True)
+    instagram = models.URLField(_('Your Instagram URL'), max_length=255, null=True, blank=True)
+    twitter = models.URLField(_('Your Twitter URL'), max_length=255, null=True, blank=True)
+    youtube = models.URLField(_('Your YouTube Channel URL'), null=True, blank=True)
+    linkedin = models.URLField(_('Your Linkedin URL'), max_length=255, null=True, blank=True)
+    github = models.URLField(_('Your Github URL'), max_length=255, null=True, blank=True)
+    facebook_appid = models.CharField(_('Your Facebook AppID'), max_length=255, null=True, blank=True)
 
 
 @register_setting
@@ -48,7 +39,7 @@ class SiteBranding(BaseSetting):
         on_delete=models.SET_NULL,
         related_name='+'
     )
-    site_name = models.CharField(max_length=250, null=True, blank=True)
+    site_name = models.CharField(_('Site Name'), max_length=250, null=True, blank=True)
     panels = [
         ImageChooserPanel('logo'),
         FieldPanel('site_name'),
@@ -57,17 +48,11 @@ class SiteBranding(BaseSetting):
 
 class HomePageContentItem(Orderable, LinkFields):
     page = ParentalKey('pages.HomePage', related_name='content_items')
-    image = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-    title = models.CharField(max_length=100)
-    content = RichTextField(null=True, blank=True,)
-    summary = RichTextField(blank=True)
-    slug = models.SlugField()
+    image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    title = models.CharField(_('Title'), max_length=100)
+    content = RichTextField(_('Content'), null=True, blank=True)
+    summary = RichTextField(_('Summary'), blank=True)
+    slug = models.SlugField(_('Slug'))
 
     panels = [
         FieldPanel('title'),
@@ -88,44 +73,45 @@ class HomePageRelatedLink(Orderable, RelatedLink):
 
 
 class HomePage(Page):
-    # Video background field
-    background_video = models.ForeignKey(
-        'wagtailmedia.Media',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-    
-    # Main content (header title and description)
-    main_title = models.CharField(max_length=255, default="DENT I DELIL CLINIC")
-    main_description = models.TextField(default="Your smile, our priority. Affordable dental care abroad.")
-
-    # Portfolio section with flexible content (StreamField)
+    background_video = models.ForeignKey('wagtailmedia.Media', null=True, blank=True, on_delete=models.SET_NULL,
+                                         related_name='+')
+    main_title = models.CharField(_('Main Title'), max_length=255, default="DENT I DELIL CLINIC")
+    main_description = models.TextField(_('Main Description'),
+                                        default="Your smile, our priority. Affordable dental care abroad.")
     portfolio_items = StreamField([
-        ('portfolio_item', blocks.StructBlock([
-            ('title', blocks.CharBlock(required=True)),
-            ('subtitle', blocks.CharBlock(required=False)),
-            ('image', ImageChooserBlock(required=True)),
+        ('portfolio_item', StructBlock([
+            ('title', CharBlock(label=_('Title'), required=True)),
+            ('subtitle', CharBlock(label=_('Subtitle'), required=False)),
+            ('image', ImageChooserBlock(label=_('Image'), required=True)),
         ])),
     ], null=True, blank=True)
 
-    # Admin panel layout
     content_panels = Page.content_panels + [
-        MediaChooserPanel('background_video'),  # Use MediaChooserPanel for selecting media (videos)
+        MediaChooserPanel('background_video'),
         FieldPanel('main_title'),
         FieldPanel('main_description'),
-        FieldPanel('portfolio_items'),
+        StreamFieldPanel('portfolio_items'),
     ]
 
     class Meta:
-        verbose_name = "Home Page"
+        verbose_name = _("Home Page")
 
     def serve(self, request):
-        # Get the root page (homepage)
-        root_page = Page.objects.get(depth=2)  # This gets the root page of the site
+        site = Site.find_for_request(request)
+        if not site:
+            raise Http404("Site not found")
+
+        current_locale = Locale.get_active()
+        if not current_locale:
+            raise Http404("Locale not found")
+
+        try:
+            root_page = Page.objects.get(depth=2, locale=current_locale, path__startswith=site.root_page.path)
+        except Page.DoesNotExist:
+            raise Http404("Root page not found for current locale")
+
         context = self.get_context(request)
-        context['root_page'] = root_page  # Pass the root page to the template context
+        context['root_page'] = root_page
         return render(request, 'home.html', context)
 
 
@@ -138,22 +124,22 @@ class StandardIndexPage(Page):
         ('pages/standard_index_page.html', 'Default Template'),
         ('pages/standard_index_page_grid.html', 'Grid Also In This Section'),
     ]
-    subtitle = models.CharField(max_length=255, blank=True)
-    intro = RichTextField(blank=True)
+    subtitle = models.CharField(_('Subtitle'), max_length=255, blank=True)
+    intro = RichTextField(_('Intro'), blank=True)
     template_string = models.CharField(
         max_length=255, choices=TEMPLATE_CHOICES,
         default='pages/standard_index_page.html'
     )
     feed_image = models.ForeignKey(
         Image,
-        help_text="An optional image to represent the page",
+        help_text=_("An optional image to represent the page"),
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+'
     )
 
-    indexed_fields = ('intro', )
+    indexed_fields = ('intro',)
 
     @property
     def template(self):
@@ -165,16 +151,14 @@ StandardIndexPage.content_panels = [
     FieldPanel('subtitle', classname="full title"),
     FieldPanel('intro', classname="full"),
     FieldPanel('template_string'),
-    InlinePanel('related_links', label="Related links"),
+    InlinePanel('related_links', label=_("Related links")),
 ]
 
 StandardIndexPage.promote_panels = [
-    MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+    MultiFieldPanel(Page.promote_panels, _("Common page configuration")),
     ImageChooserPanel('feed_image'),
 ]
 
-
-# Standard page
 
 class StandardPageCarouselItem(Orderable, CarouselItem):
     page = ParentalKey('pages.StandardPage', related_name='carousel_items')
@@ -189,12 +173,12 @@ class StandardPage(Page):
         ('pages/standard_page.html', 'Default Template'),
         ('pages/standard_page_full.html', 'Standard Page Full'),
     ]
-    subtitle = models.CharField(max_length=255, blank=True)
-    intro = RichTextField(blank=True)
+    subtitle = models.CharField(_('Subtitle'), max_length=255, blank=True)
+    intro = RichTextField(_('Intro'), blank=True)
     body = StreamField([
-        ('paragraph', blocks.RichTextBlock()),
-        ('image', ImageChooserBlock()),
-        ('html', blocks.RawHTMLBlock()),
+        ('paragraph', RichTextBlock(label=_('Paragraph'))),
+        ('image', ImageChooserBlock(label=_('Image'))),
+        ('html', RawHTMLBlock(label=_('HTML'))),
     ])
     template_string = models.CharField(
         max_length=255, choices=TEMPLATE_CHOICES,
@@ -224,9 +208,8 @@ StandardPage.content_panels = [
     FieldPanel('intro', classname="full"),
     StreamFieldPanel('body'),
     FieldPanel('template_string'),
-    InlinePanel('carousel_items', label="Carousel items"),
-    InlinePanel('related_links', label="Related links"),
-
+    InlinePanel('carousel_items', label=_("Carousel items")),
+    InlinePanel('related_links', label=_("Related links")),
 ]
 
 StandardPage.promote_panels = Page.promote_panels + [
@@ -239,7 +222,7 @@ class VideoGalleryPageCarouselItem(Orderable, CarouselItem):
 
 
 class VideoGalleryPage(Page):
-    intro = RichTextField(blank=True)
+    intro = RichTextField(_('Intro'), blank=True)
     feed_image = models.ForeignKey(
         Image,
         null=True,
@@ -256,8 +239,7 @@ class VideoGalleryPage(Page):
 VideoGalleryPage.content_panels = [
     FieldPanel('title', classname="full title"),
     FieldPanel('intro', classname="full"),
-    InlinePanel('carousel_items', label="Carousel items"),
-
+    InlinePanel('carousel_items', label=_("Carousel items")),
 ]
 
 VideoGalleryPage.promote_panels = Page.promote_panels + [
@@ -266,7 +248,7 @@ VideoGalleryPage.promote_panels = Page.promote_panels + [
 
 
 class TestimonialPage(Page):
-    intro = RichTextField(blank=True)
+    intro = RichTextField(_('Intro'), blank=True)
     feed_image = models.ForeignKey(
         Image,
         null=True,
@@ -298,10 +280,10 @@ class ContentBlock(LinkFields):
         blank=True,
         on_delete=models.SET_NULL
     )
-    title = models.CharField(max_length=255)
-    body = RichTextField()
-    summary = RichTextField(blank=True)
-    slug = models.SlugField()
+    title = models.CharField(_('Title'), max_length=255)
+    body = RichTextField(_('Body'))
+    summary = RichTextField(_('Summary'), blank=True)
+    slug = models.SlugField(_('Slug'))
     panels = [
         PageChooserPanel('page'),
         FieldPanel('title'),
@@ -326,11 +308,11 @@ class Testimonial(LinkFields):
         blank=True,
         on_delete=models.SET_NULL
     )
-    name = models.CharField(max_length=150)
+    name = models.CharField(_('Name'), max_length=150)
     photo = models.ForeignKey(
         Image, null=True, blank=True, on_delete=models.SET_NULL
     )
-    text = RichTextField(blank=True)
+    text = RichTextField(_('Text'), blank=True)
 
     panels = [
         PageChooserPanel('page'),
@@ -355,12 +337,12 @@ class Advert(LinkFields):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    title = models.CharField(max_length=150, null=True)
+    title = models.CharField(_('Title'), max_length=150, null=True)
     image = models.ForeignKey(
         Image, null=True, blank=True, on_delete=models.SET_NULL
     )
-    button_text = models.CharField(max_length=150, null=True)
-    text = RichTextField(blank=True)
+    button_text = models.CharField(_('Button Text'), max_length=150, null=True)
+    text = RichTextField(_('Text'), blank=True)
 
     panels = [
         PageChooserPanel('page'),
@@ -378,12 +360,10 @@ class Advert(LinkFields):
 register_snippet(Advert)
 
 
-# Faqs Page
-
 class FaqsPage(Page):
     body = StreamField([
-        ('faq_question', blocks.CharBlock(classname="full title")),
-        ('faq_answer', blocks.RichTextBlock()),
+        ('faq_question', CharBlock(label=_('FAQ Question'), classname="full title")),
+        ('faq_answer', RichTextBlock(label=_('FAQ Answer'))),
     ])
 
 

@@ -16,7 +16,7 @@
     </div>
     {% if page.background_video %}
         <video autoplay loop muted>
-            <source src="{{ page.background_video }}" type="video/mp4">
+            <source src="{% static 'home/highway-loop.mp4' %}" type="video/mp4">
         </video>
     {% endif %}
 </div>
