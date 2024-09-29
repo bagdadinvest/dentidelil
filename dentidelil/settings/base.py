@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 from sys import path
 from pathlib import Path
+from storages.backends.azure_storage import AzureStorage
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -63,7 +64,7 @@ INSTALLED_APPS = (
     'modelcluster',
 
     'foundation_formtags',
-
+    'storages',
     'blog',
     'contact',
     'documents_gallery',
@@ -102,8 +103,6 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.linkedin',
-    'rosetta',
-    'storages',
 
 )
 
@@ -334,3 +333,20 @@ DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 # URL for accessing media files via Azure Blob Storage
 MEDIA_URL = f'https://denti.blob.core.windows.net/media/'
 MEDIA_ROOT = ''
+
+
+WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
+    "CLASS": "translations.azure.AzureTranslator",
+    "OPTIONS": {
+        'subscription_key': '106c8f6b95a4460fae580599a6c74348',  # Replace with your Azure key
+        'region': 'uaenorth',
+    }
+}
+
+# Azure settings (adjust as needed)
+class AzureMediaStorage(AzureStorage):
+    account_name = 'denti2'  # Replace with your actual account name
+    account_key = 'KB/figw+2rVzw5WKedTHyoDfQd7X3jsmC0n2L15ALbeImxjK4sWpxYaeq2ICvVk8g9enQ9Dnx682+AStJPnL9Q=='  # Replace with your actual account key
+    azure_container = 'dentistorage'  # Replace with your actual container name
+    expiration_secs = None
+

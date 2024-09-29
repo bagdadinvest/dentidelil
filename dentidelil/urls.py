@@ -59,7 +59,6 @@ urlpatterns += i18n_patterns(
 
     # Rosita URL (ensure it exists)
     # Assuming 'rosita.urls' is the correct module for rosita paths
-    url(r'^rosetta/', include('rosetta.urls')),
 
     # Fallback to Wagtail's page serving mechanism
     url(r'', include(wagtail_urls)),

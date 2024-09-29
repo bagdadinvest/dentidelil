@@ -1,4 +1,4 @@
-amqp==5.2.0
+﻿amqp==5.2.0
 anyascii==0.3.2
 asgiref==3.8.1
 async-timeout==4.0.3
@@ -66,6 +66,7 @@ tzdata==2024.1
 urllib3==2.2.3
 vine==5.1.0
 wagtail==2.16.3
+wagtail-localize==1.1
 wagtailmedia==0.10.0
 Wand==0.6.7
 wcwidth==0.2.13
